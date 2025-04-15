@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Employee</title>
+    <link rel="stylesheet" href="/php-test/assets/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add New Employee</h2>
+
+        <form id="employeeForm">
+            <label>Employee Name:</label>
+            <input type="text" name="name" required><br><br>
+
+            <label>Gender:</label>
+            <select name="gender" required>
+                <option value="">--Select--</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select><br><br>
+
+            <label>Marital Status:</label>
+            <select name="marital_status" required>
+                <option value="">--Select--</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+            </select><br><br>
+
+            <label>Phone No:</label>
+            <input type="text" name="phone" required><br><br>
+
+            <label>Email:</label>
+            <input type="email" name="email" required><br><br>
+
+            <label>Address:</label>
+            <textarea name="address" required></textarea><br><br>
+
+            <label>Date of Birth:</label>
+            <input type="date" name="dob" required><br><br>
+
+            <label>Nationality:</label>
+            <input type="text" name="nationality" required><br><br>
+
+            <label>Hire Date:</label>
+            <input type="date" name="hire_date" required><br><br>
+
+            <label>Department:</label>
+            <input type="text" name="department" required><br><br>
+
+            <button type="submit" action="/php-test/public/employee/store">Add Employee</button>
+        </form>
+
+        <div id="responseMessage"></div>
+    </div>
+
+    <script>
+        $("#employeeForm").submit(function(event) {
+            event.preventDefault();
+
+            var formData = $(this).serializeArray();
+
+            var dataObject = {};
+            formData.forEach(function(item) {
+                dataObject[item.name] = item.value;
+            });
+
+            $.ajax({
+                url: '/php-test/api/employee/store',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(dataObject),
+                success: function(response) {
+                    $("#responseMessage").html("<p>" + response.message + "</p>");
+                },
+                error: function() {
+                    $("#responseMessage").html("<p>Something went wrong, please try again.</p>");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
